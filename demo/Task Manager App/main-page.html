@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="main-page.css">
+    </head>
+
+        <body>
+
+            <div class="header"> <!--Header-->
+                <div class="header-left">
+                    <img src="Images/App-Logo/LOGO.png" alt="Logo" class="logo-image">
+                </div>
+
+                <div class="header-center">
+                    Task manager
+                </div>
+            
+                <div class="header-right"></div>
+            </div>
+
+            <main> <!--Body-->
+                <div class="dashboard">
+                    <div class="task-header">Tasks:</div>
+                    <div class="middle">
+                        <button class="add-task-button">+ Add Task</button>
+                    </div>
+                    <div class="rightmost">
+                        <button class="delete-task-button">- Delete Task</button>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <input class="input-task js-input-task" placeholder="Task Name">
+                    <button class="task-add-button js-task-add-button" onclick="
+                        addTask();
+                    ">Add</button>
+                    <div></div>
+                </div>
+
+                <div class="js-display-task"></div>
+            </main>
+            
+            <script>
+
+                const taskList = [];
+
+                function updateTask(){
+                    let taskHTML = '';
+
+                    for(let i = 0; i < taskList.length; i++){
+                        const task = taskList[i];
+                        const html = `
+                        
+                            <p class="name-delete">
+                                ${task} 
+                                <button class="task-delete" onclick="
+                                    taskList.splice(${i}, 1);
+                                    updateTask();
+                                ">Delete</button
+                            </p>
+                            
+                        
+                        `;
+                        taskHTML += html;
+                    }
+
+                    document.querySelector(".js-display-task")
+                      .innerHTML = taskHTML;
+                }
+
+                function addTask(){
+
+                    const inputElement = document.querySelector(".js-input-task");
+                    const value = inputElement.value;
+
+                    taskList.push(value);
+                    console.log(taskList);
+
+                    inputElement.value = '';
+                    
+                    updateTask();
+                }
+
+
+                fetch("http://localhost:8080/tasks")
+                    .then(res => res.json())
+                    .then(data => console.log(data));
+            </script>
+        </body>
+    
+</html>
