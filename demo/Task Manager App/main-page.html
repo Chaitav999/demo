@@ -42,9 +42,7 @@
             
             <script>
 
-                const taskList = [];
-
-                function updateTask(){
+         /*       function updateTask(){
                     let taskHTML = '';
 
                     for(let i = 0; i < taskList.length; i++){
@@ -58,33 +56,68 @@
                                     updateTask();
                                 ">Delete</button
                             </p>
-                            
-                        
                         `;
                         taskHTML += html;
                     }
 
                     document.querySelector(".js-display-task")
                       .innerHTML = taskHTML;
-                }
+                } */
 
+                loadTasks();
+
+                // Adding tasks to the backend
                 function addTask(){
 
-                    const inputElement = document.querySelector(".js-input-task");
+                    const inputElement = document.querySelector(".js-input-task"); 
                     const value = inputElement.value;
 
-                    taskList.push(value);
-                    console.log(taskList);
+                    <!--Sending data to the backend-->
+                    fetch("http://localhost:8080/tasks", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: value,
+                        completed: false
+                    })
+                });
 
                     inputElement.value = '';
-                    
-                    updateTask();
                 }
 
+                // Get the tasks from the backend
+                
+                function loadTasks(){
+                    fetch("http://localhost:8080/tasks")
+                        .then(res => res.json())
+                        .then(tasks => {
+                           let displayHTML = '';
 
-                fetch("http://localhost:8080/tasks")
-                    .then(res => res.json())
-                    .then(data => console.log(data));
+                           tasks.forEach((task, index) =>  {
+                              let taskHTML = `
+                                <p>${task.title}</p>
+                                <button onclick="
+                                    deleteTask(${index});
+                                ">delete</button>
+                              `;
+                              displayHTML += taskHTML;
+                           });
+
+                           document.querySelector('.js-display-task')
+                             .innerHTML = displayHTML;
+                        })
+                }
+
+                function deleteTask(idx){
+                    console.log("working");
+                    fetch(`http://localhost:8080/tasks/${idx}`, {
+                        method: "DELETE",
+                }).then(response => {loadTasks()});
+
+                }
+                
             </script>
         </body>
     
