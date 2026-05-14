@@ -1,7 +1,26 @@
 body{
-    background-color: rgb(255, 255, 255);
+    background: linear-gradient(-45deg, #ee7752,
+        #e73c7e,
+        #23a6d5,
+        #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientMove 20s ease infinite;
     margin: 0;
     padding: 0;
+}
+@keyframes gradientMove {
+
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .header-left, .header-center, .header-right{
@@ -12,8 +31,12 @@ body{
 .header{
     display: flex; 
     height: 100px;
-    background-color: rgb(21, 67, 158);
-    
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+
+    color: white;
+
+    border-bottom: 1px solid rgba(255,255,255,0.2);
     align-items: center;
     padding: 0 20px;
 }
@@ -79,12 +102,24 @@ body{
     font-size: 18px;
 }
 .task-add-button{
-    
+    background-color: rgb(59, 196, 25);
+    color: white;
     height: 35px;
     width: 80px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 2px;
+}
+.task-add-button:hover{
+    transition: 0.2s ease;
+    transform: translateX(3px);
+    background-color: rgb(21, 126, 37);
+    box-shadow: 2px;
 }
 
-/*---dynamic todo name & delete name display---*/
+/*---dynamic todo name & delete name display---
 .name-delete{
     margin-left: 23px;
 
@@ -93,4 +128,58 @@ body{
     margin-left: 155px;
     height: 35px;
     width: 80px;
+}*/
+
+/*-----Dynamic tasks and delete button-----*/
+.css-display-task{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+.css-task-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 288px;
+}
+.css-button-grp{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.css-task-name{
+    font-size: 20px;
+    
+}
+.css-delete-button{
+    background-color: rgb(205, 31, 31);
+    color: white;
+    height: 35px;
+    width: 80px;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 2px;
+}
+.css-delete-button:hover{
+    transition: 0.2s ease;
+    transform: translateY(-3px);
+    background-color: rgb(111, 46, 28);
+    
+}
+.css-green-tick-img{
+    height: 50px;
+    overflow: hidden;
+}
+.css-green-tick-buttn{
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+.css-green-tick-buttn:hover{
+    transition: 0.2s ease;
+    transform: translateY(-3px);
 }

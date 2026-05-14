@@ -37,7 +37,7 @@
                     <div></div>
                 </div>
 
-                <div class="js-display-task"></div>
+                <div class="js-display-task css-display-task"></div>
             </main>
             
             <script>
@@ -97,16 +97,34 @@
 
                            tasks.forEach((task, index) =>  {
                               let taskHTML = `
-                                <p>${task.title}</p>
-                                <button onclick="
-                                    deleteTask(${index});
-                                ">delete</button>
-                              `;
+                              <div class="css-task-row">
+
+                                <p class="css-task-name">${task.title}</p>
+
+                                <div class="css-button-grp">
+
+                                    <button class="css-green-tick-buttn js-green-tick-buttn" title="Completed">
+                                        <img class="css-green-tick-img" src="Images/Green-tick/pngtree-green-check-mark-png-image_6525691.png">
+                                    </button>
+
+                                    <button class="css-delete-button" onclick="
+                                        deleteTask(${index});
+                                    ">Delete</button> 
+
+                                </div>
+
+                              </div>`;
                               displayHTML += taskHTML;
                            });
 
                            document.querySelector('.js-display-task')
                              .innerHTML = displayHTML;
+
+                           const listen = document.querySelector('.js-green-tick-buttn');
+
+                           listen.addEventListener('click', () => {
+                                console.log("clicked");
+                           })
                         })
                 }
 
@@ -115,9 +133,8 @@
                     fetch(`http://localhost:8080/tasks/${idx}`, {
                         method: "DELETE",
                 }).then(response => {loadTasks()});
-
                 }
-                
+
             </script>
         </body>
     
