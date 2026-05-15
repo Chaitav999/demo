@@ -1,27 +1,18 @@
 body{
-    background: linear-gradient(-45deg, #ee7752,
-        #e73c7e,
-        #23a6d5,
-        #23d5ab);
-    background-size: 400% 400%;
-    animation: gradientMove 20s ease infinite;
     margin: 0;
-    padding: 0;
+    min-height: 100vh;
+
+    background: linear-gradient(
+    to bottom,
+    #d1913c,
+    #8b5e34,
+    #2c1810,
+    #0d0d0d
+);
+    color: white;
+    background-repeat: no-repeat;
 }
-@keyframes gradientMove {
 
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
 
 .header-left, .header-center, .header-right{
     flex: 1;
@@ -31,12 +22,12 @@ body{
 .header{
     display: flex; 
     height: 100px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-
-    color: white;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
 
     border-bottom: 1px solid rgba(255,255,255,0.2);
+
+    color: white;
     align-items: center;
     padding: 0 20px;
 }
@@ -94,27 +85,38 @@ body{
 .input-area{
     display: flex;
     align-items: center;
+    flex: 1;
 }
 .input-task{
+    display: flex;
     height: 30px;
-    width: 200px;
+    width: 600px; 
     margin-left: 20px;
-    font-size: 18px;
+    margin-right: 20px;
+    font-size: 15px;
+    padding: 5px 5px 5px 10px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgb(248, 251, 252);
+}
+.input-task:focus{
+    outline: none;
 }
 .task-add-button{
     background-color: rgb(59, 196, 25);
     color: white;
-    height: 35px;
+    height: 38px;
     width: 80px;
     cursor: pointer;
     border: none;
     font-size: 16px;
     padding: 6px;
     border-radius: 2px;
+    font-weight: bold;
 }
 .task-add-button:hover{
     transition: 0.2s ease;
-    transform: translateX(3px);
+    transform: translateX(-3px);
     background-color: rgb(21, 126, 37);
     box-shadow: 2px;
 }
@@ -134,19 +136,20 @@ body{
 .css-display-task{
     display: flex;
     flex-direction: column;
-    margin-left: 20px;
+    margin-left: 28px;
+    margin-top: 20px;
 }
 .css-task-row{
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    width: 288px;
+    width: 707px;
 }
 .css-button-grp{
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 18px;
 }
 .css-task-name{
     font-size: 20px;
@@ -162,6 +165,7 @@ body{
     font-size: 16px;
     padding: 6px;
     border-radius: 2px;
+    font-weight: bold;
 }
 .css-delete-button:hover{
     transition: 0.2s ease;
@@ -170,16 +174,83 @@ body{
     
 }
 .css-green-tick-img{
-    height: 50px;
-    overflow: hidden;
+    width: 40px;
+    transition: transform 0.6s ease;
 }
 .css-green-tick-buttn{
     background: transparent;
     border: none;
     padding: 0;
     cursor: pointer;
+    position: relative;
 }
 .css-green-tick-buttn:hover{
     transition: 0.2s ease;
     transform: translateY(-3px);
+}
+
+/*----green tick button animation----*/
+.rotate-success{
+    animation: successSpin 0.7s ease;
+}
+.rotate-success::after{
+    content: '';
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 20px;
+    height: 20px;
+
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+
+    box-shadow: 0 0 10px #00ff88,
+        0 0 20px #00ff88,
+        0 0 40px #00ff88;
+
+    animation: burst 0.5s ease-out;;
+}
+@keyframes successSpin{
+
+    0%{
+        transform: rotate(0deg) scale(1);
+    }
+    100%{
+        transform: rotate(-720deg) scale(1);
+    }
+}
+
+@keyframes burst{
+
+    0%{
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    100%{
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(3);
+    }
+}
+
+/*----deleting task with green tick button----*/
+.fade-out-task{
+    animation: fadeTask 5s ease forwards;
+}
+@keyframes fadeTask {
+    0%{
+        opacity: 1;
+        transform: scale(1) translateX(0);
+    }
+
+    50%{
+        opacity: 0.7;
+        transform: scale(0.9) translateX(10px);
+    }
+    100%{
+        opacity: 0;
+        transform: scale(0) translateX(30px);
+    }
 }
