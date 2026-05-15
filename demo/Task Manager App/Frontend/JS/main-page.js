@@ -1,48 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="main-page.css">
-    </head>
-
-        <body>
-
-            <div class="header"> <!--Header-->
-                <div class="header-left">
-                    <img src="Images/App-Logo/LOGO.png" alt="Logo" class="logo-image">
-                </div>
-
-                <div class="header-center">
-                    Task manager
-                </div>
-            
-                <div class="header-right"></div>
-            </div>
-
-            <main> <!--Body-->
-                <div class="dashboard">
-                    <div class="task-header">Tasks:</div>
-                    <div class="middle">
-                        <button class="add-task-button">+ Add Task</button>
-                    </div>
-                    <div class="rightmost">
-                        <button class="delete-task-button">- Delete Task</button>
-                    </div>
-                </div>
-
-                <div class="input-area">
-                    <input class="input-task js-input-task" placeholder="Task Name">
-                    <button class="task-add-button js-task-add-button" onclick="
-                        addTask();
-                    ">Add</button>
-                    <div></div>
-                </div>
-
-                <div class="js-display-task css-display-task"></div>
-            </main>
-            
-            <script>
-
-         /*       function updateTask(){
+/*       function updateTask(){
                     let taskHTML = '';
 
                     for(let i = 0; i < taskList.length; i++){
@@ -72,7 +28,7 @@
                     const inputElement = document.querySelector(".js-input-task"); 
                     const value = inputElement.value;
 
-                    <!--Sending data to the backend-->
+                    //----Sending data to the backend----
                     fetch("http://localhost:8080/tasks", {
                     method: "POST",
                     headers: {
@@ -85,6 +41,7 @@
                 });
 
                     inputElement.value = '';
+                    loadTasks();
                 }
 
                 // Get the tasks from the backend
@@ -97,7 +54,7 @@
 
                            tasks.forEach((task, index) =>  {
                               let taskHTML = `
-                              <div class="css-task-row">
+                              <div class="css-task-row js-task-row-${index}">
 
                                 <p class="css-task-name">${task.title}</p>
 
@@ -120,22 +77,61 @@
                            document.querySelector('.js-display-task')
                              .innerHTML = displayHTML;
 
-                           const listen = document.querySelector('.js-green-tick-buttn');
+                            // for green-tick button animation && deleting task
 
-                           listen.addEventListener('click', () => {
-                                console.log("clicked");
-                           })
-                        })
-                }
+                            const buttons = document.querySelectorAll('.js-green-tick-buttn')
+
+                            buttons.forEach((button, index) => {
+                                button.addEventListener('click', () => {
+                                    fetch(`http://localhost:8080/tasks/${index}`, {
+                                        method: "PUT",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        } 
+                                    })//fetch closing
+                                      .then(res => res.json())
+                                      .then(updated => console.log(updated));
+                                }) //eventlistener closing
+                            }) //loop closing
+                            
+                              animateGreenTickButton();
+
+                           });//.then() closing
+                        }//function closing
 
                 function deleteTask(idx){
-                    console.log("working");
                     fetch(`http://localhost:8080/tasks/${idx}`, {
                         method: "DELETE",
                 }).then(response => {loadTasks()});
                 }
 
-            </script>
-        </body>
-    
-</html>
+                function animateGreenTickButton(){
+                    const buttons = document.querySelectorAll('.js-green-tick-buttn');
+
+                               buttons.forEach((button, index) => {
+                                button.addEventListener('click', () => {
+
+                                    button.classList.add('rotate-success');
+
+                                    const task = document.querySelector(`.js-task-row-${index}`);
+                                    
+
+                                    setTimeout(() => {
+
+                                        button.classList.remove('rotate-success');
+
+                                        task.classList.add('fade-out-task');
+
+                                    }, 700);
+
+                                    setTimeout(() => {
+
+                                        deleteTask(index);
+                                        
+                                    }, 5200);
+
+
+                                }); //evenlistner closing
+
+                              }); //loop closing
+                }

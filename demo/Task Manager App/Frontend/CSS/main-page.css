@@ -41,6 +41,7 @@ body{
 .logo-image{
     height: 60px;
     border-radius: 2px;
+    background: transparent;
 }
 
 /* ---- main body ---- */
@@ -120,17 +121,6 @@ body{
     background-color: rgb(21, 126, 37);
     box-shadow: 2px;
 }
-
-/*---dynamic todo name & delete name display---
-.name-delete{
-    margin-left: 23px;
-
-}
-.task-delete{
-    margin-left: 155px;
-    height: 35px;
-    width: 80px;
-}*/
 
 /*-----Dynamic tasks and delete button-----*/
 .css-display-task{
