@@ -26,7 +26,12 @@
                 function addTask(){
 
                     const inputElement = document.querySelector(".js-input-task"); 
-                    const value = inputElement.value;
+                    const value = inputElement.value.trim();
+
+                    if(value === ''){
+                        alert("ENTER A VALID INPUT");
+                        return;
+                    }
 
                     //----Sending data to the backend----
                     fetch("http://localhost:8080/tasks", {
@@ -38,10 +43,11 @@
                         title: value,
                         completed: false
                     })
-                });
+                }).then(res => res.json())
+                  .then(data => {loadTasks()});
 
                     inputElement.value = '';
-                    loadTasks();
+                    
                 }
 
                 // Get the tasks from the backend
@@ -50,11 +56,18 @@
                     fetch("http://localhost:8080/tasks")
                         .then(res => res.json())
                         .then(tasks => {
-                           let displayHTML = '';
+                            let displayHTML = '';
 
                            tasks.forEach((task, index) =>  {
+                              
+                              let rowClass = "";
+                              if(task.completed === true){
+                                rowClass = "completed-task";
+                                } 
+
+                              
                               let taskHTML = `
-                              <div class="css-task-row js-task-row-${index}">
+                              <div class="css-task-row ${rowClass} js-task-row-${index}">
 
                                 <p class="css-task-name">${task.title}</p>
 
@@ -83,19 +96,30 @@
 
                             buttons.forEach((button, index) => {
                                 button.addEventListener('click', () => {
+
+                                    button.classList.add("rotate-success");
+                                    setTimeout(() => {
+
+                                        button.classList.remove('rotate-success');
+
+                                    }, 700);
+
                                     fetch(`http://localhost:8080/tasks/${index}`, {
                                         method: "PUT",
                                         headers: {
                                             "Content-Type": "application/json"
                                         } 
-                                    })//fetch closing
-                                      .then(res => res.json())
-                                      .then(updated => console.log(updated));
+                                    }).then(res => res.json())
+                                      .then(data => {
+                                        setTimeout(() => {
+                                            loadTasks();
+                                        }, 700);
+                                        
+                                    });
                                 }) //eventlistener closing
-                            }) //loop closing
-                            
-                              animateGreenTickButton();
 
+                            }) //loop closing
+                                  
                            });//.then() closing
                         }//function closing
 
@@ -105,7 +129,7 @@
                 }).then(response => {loadTasks()});
                 }
 
-                function animateGreenTickButton(){
+       /*         function animateGreenTickButton(){
                     const buttons = document.querySelectorAll('.js-green-tick-buttn');
 
                                buttons.forEach((button, index) => {
@@ -114,24 +138,16 @@
                                     button.classList.add('rotate-success');
 
                                     const task = document.querySelector(`.js-task-row-${index}`);
+
+                                    task.classList.add("completed-task");
                                     
 
                                     setTimeout(() => {
 
                                         button.classList.remove('rotate-success');
 
-                                        task.classList.add('fade-out-task');
-
-                                    }, 700);
-
-                                    setTimeout(() => {
-
-                                        deleteTask(index);
-                                        
-                                    }, 5200);
-
-
+                                    }, 700)
                                 }); //evenlistner closing
 
                               }); //loop closing
-                }
+                } */ 
