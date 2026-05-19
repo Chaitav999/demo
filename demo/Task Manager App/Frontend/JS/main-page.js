@@ -38,27 +38,28 @@
                 .then(tasks => {
                     let displayHTML = '';
 
-                    tasks.forEach((task, index) =>  {
+                    tasks.forEach((task) =>  {
                         
                         let rowClass = "";
                         if(task.completed === true){
                         rowClass = "completed-task";
                         } 
-
                         
                         let taskHTML = `
-                        <div class="css-task-row ${rowClass} js-task-row-${index}">
+                        <div class="css-task-row ${rowClass} js-task-row-${task.id}">
 
                         <p class="css-task-name">${task.title}</p>
 
                         <div class="css-button-grp">
 
-                            <button class="css-green-tick-buttn js-green-tick-buttn" title="Completed">
+                            <button class="css-green-tick-buttn js-green-tick-buttn" title="Completed" onclick="
+                                completeTask(${task.id}, this);
+                            ">
                                 <img class="css-green-tick-img" src="Images/Green-tick/pngtree-green-check-mark-png-image_6525691.png">
                             </button>
 
                             <button class="css-delete-button" onclick="
-                                deleteTask(${index});
+                                deleteTask(${task.id});
                             ">Delete</button> 
 
                         </div>
@@ -72,39 +73,25 @@
 
                     // for green-tick button animation && deleting task
 
-                    const buttons = document.querySelectorAll('.js-green-tick-buttn')
-
-                    buttons.forEach((button, index) => {
-                        button.addEventListener('click', () => {
-
-                            button.classList.add("rotate-success");
-                            setTimeout(() => {
-
-                                button.classList.remove('rotate-success');
-
-                            }, 700);
-
-                            fetch(`http://localhost:8080/tasks/${index}`, {
-                                method: "PUT",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                } 
-                            }).then(res => res.json())
-                                .then(data => {
-                                setTimeout(() => {
-                                    loadTasks();
-                                }, 700);
-                                
-                            });
-                        }) //eventlistener closing
-
-                    }) //loop closing
-                            
                     });//.then() closing
                 }//function closing
 
-        function deleteTask(idx){
-            fetch(`http://localhost:8080/tasks/${idx}`, {
+        function deleteTask(id){
+            fetch(`http://localhost:8080/tasks/${id}`, {
                 method: "DELETE",
         }).then(response => {loadTasks()});
+        }
+
+        function completeTask(id, button){
+            button.classList.add("rotate-success");
+
+            fetch(`http://localhost:8080/tasks/${id}`,{
+                method: "PUT"
+            }).then(res => res.json())
+              .then(data => {
+                    setTimeout(() => {
+                    button.classList.remove("rotate-success");
+                    loadTasks();
+                }, 700);
+              })
         }
