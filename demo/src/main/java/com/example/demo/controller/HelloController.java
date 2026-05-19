@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,45 +11,51 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.demo.repository.TaskRepository;
 
 @CrossOrigin(origins= "*")
 @RestController
 public class HelloController {
+
+    private TaskRepository repository;
     
-    List<Task> tasks = new ArrayList<>();
+    public HelloController(TaskRepository repository){
+        this.repository = repository;
+    }
 
     @GetMapping("/tasks")
     public List<Task> getTasks() {
      
-        return tasks;
+        return repository.findAll();
     }
 
     @PostMapping("/tasks")
     public List<Task> recieveData(@RequestBody Task task) {
         //TODO: process POST request
 
-        tasks.add(task);
+        repository.save(task);
         
-        return tasks;
+        return repository.findAll();
     }
     
     @DeleteMapping("/tasks/{idx}")
-    public List<Task> deleteTask(@PathVariable int idx){
+    public List<Task> deleteTask(@PathVariable long idx){
         
-        tasks.remove(idx);
+        repository.deleteById(idx);
 
-        return tasks;
+        return repository.findAll();
     }
 
     @PutMapping("/tasks/{id}")
-    public List<Task> putMethodName(@PathVariable int id) {
+    public List<Task> putMethodName(@PathVariable long id) {
         
-        Task task = tasks.get(id);
+        Task task = repository.findById(id).get();
 
         task.setCompleted(true);
+
+        repository.save(task);
         
-        return tasks;
+        return repository.findAll();
     }
     
 }
