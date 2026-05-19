@@ -11,51 +11,36 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.repository.TaskRepository;
+import com.example.demo.Service.TaskService;
 
 @CrossOrigin(origins= "*")
 @RestController
 public class HelloController {
 
-    private TaskRepository repository;
+    private TaskService taskService;
     
-    public HelloController(TaskRepository repository){
-        this.repository = repository;
+    public HelloController(TaskService taskService){
+        this.taskService = taskService;
     }
 
     @GetMapping("/tasks")
     public List<Task> getTasks() {
-     
-        return repository.findAll();
+        return taskService.getTasks();
     }
 
     @PostMapping("/tasks")
     public List<Task> recieveData(@RequestBody Task task) {
-        //TODO: process POST request
-
-        repository.save(task);
-        
-        return repository.findAll();
+        return taskService.addTask(task);
     }
     
     @DeleteMapping("/tasks/{idx}")
     public List<Task> deleteTask(@PathVariable long idx){
-        
-        repository.deleteById(idx);
-
-        return repository.findAll();
+        return taskService.deleteTask(idx);
     }
 
     @PutMapping("/tasks/{id}")
     public List<Task> putMethodName(@PathVariable long id) {
-        
-        Task task = repository.findById(id).get();
-
-        task.setCompleted(true);
-
-        repository.save(task);
-        
-        return repository.findAll();
+        return taskService.updateTask(id);
     }
     
 }
