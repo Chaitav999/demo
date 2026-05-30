@@ -39,7 +39,7 @@ public class HelloController {
     }
 
     @PutMapping("/tasks/{id}")
-    public List<Task> putMethodName(@PathVariable long id) {
+    public List<Task> update(@PathVariable long id) {
         return taskService.updateTask(id);
     }
     
